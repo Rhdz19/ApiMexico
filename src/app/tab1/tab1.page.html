@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Actividar Autocompletar
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar [(ngModel)]="searchTerm" (ionChange)="onSearchChange($event)" placeholder="Ingresa una direccion"></ion-searchbar>
+  <ion-list>
+    <ion-item *ngFor="let option of autocompleteOptions">
+      {{ option }}
+    </ion-item>
+  </ion-list>
+</ion-content>

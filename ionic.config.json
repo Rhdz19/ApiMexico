@@ -1,0 +1,7 @@
+{
+  "name": "ApiMexico",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
