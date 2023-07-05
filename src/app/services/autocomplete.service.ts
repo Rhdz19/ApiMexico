@@ -1,20 +1,15 @@
 import { Injectable } from '@angular/core';
-
+import { HttpClient } from '@angular/common/http';
+import { FormControl, UntypedFormGroup, Validators } from "@angular/forms";
 @Injectable({
   providedIn: 'root'
 })
 export class AutocompleteService {
+  timer: any;
+  constructor(private http: HttpClient) { }
 
-  constructor() { }
-
-  a
   fetchAutocompleteOptions(searchTerm: string) {
-
-    this.http.get<any>('https://api.m2mexico.com/api/resources/location/predict/?location=cancun', { params: { q: searchTerm } })
-      .subscribe(response => {
-        this.autocompleteOptions = response.options;
-
-        
-      });
+    return this.http.get<any>('https://api.m2mexico.com/api/resources/location/predict/?location=cancun', { params: { q: searchTerm } });
   }
+
 }
