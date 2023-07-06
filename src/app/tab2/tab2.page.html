@@ -13,5 +13,77 @@
     </ion-toolbar>
   </ion-header>
 
-  <!-- <app-explore-container name="Tab 2 page"></app-explore-container> -->
-</ion-content>
+</ion-content> 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Selección de ubicación
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>País</ion-label>
+      <ion-select [(ngModel)]="selectedCountry" (ionChange)="onCountryChange()">
+        <ion-select-option *ngFor="let country of countries" [value]="country">
+          {{ country.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Estado</ion-label>
+      <ion-select [(ngModel)]="selectedState" (ionChange)="onStateChange()">
+        <ion-select-option *ngFor="let state of states" [value]="state">
+          {{ state.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Municipio</ion-label>
+      <ion-select [(ngModel)]="selectedMunicipality" (ionChange)="onMunicipalityChange()">
+        <ion-select-option *ngFor="let municipality of municipalities" [value]="municipality">
+          {{ municipality.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Ciudad</ion-label>
+      <ion-select [(ngModel)]="selectedCity" (ionChange)="onCityChange()">
+        <ion-select-option *ngFor="let city of cities" [value]="city">
+          {{ city.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Colonia</ion-label>
+      <ion-select [(ngModel)]="selectedColony">
+        <ion-select-option *ngFor="let colony of colonies" [value]="colony">
+          {{ colony.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content> -->
