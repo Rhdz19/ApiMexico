@@ -14,6 +14,12 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, A
   imports: [IonicModule, HttpClientModule, CommonModule, ReactiveFormsModule, FormsModule],
   providers: [LocationService]
 })
+
+/**
+ * CORRECCION: Aplicar todas las correcciones de tab 1
+ * tipado, snake_case, uso de promesas
+ */
+
 export class Tab2Page implements OnInit {
 
   isButtonDisabled: boolean = true;
@@ -50,11 +56,11 @@ export class Tab2Page implements OnInit {
       stateForm:['',[Validators.required]],
       municipalityForm:['',[Validators.required]],
       colonyForm:['',[Validators.required]],
-  
+
     });
-    
+
   }
-  
+
   checkFormValidity() {
     this.isButtonDisabled = !this.myForm.valid;
   }
@@ -65,8 +71,8 @@ export class Tab2Page implements OnInit {
     });
 
   }
-  
-  
+
+
   onCountryChange(event: any) {
 
     const selectedCountry = event.detail.value;
@@ -83,7 +89,7 @@ export class Tab2Page implements OnInit {
       this.selectedOptionIndex = 1;
 
     });
-    
+
   }
 
   onStateChange(event: any) {
@@ -140,14 +146,13 @@ export class Tab2Page implements OnInit {
 
         this.cities = [matchingColony];
 
-       
+
       } else {
         console.log("Sin colonias coincidentes");
       }
     });
 
     this.selectedOptionIndex = 4;
-    
 
 
 
@@ -155,7 +160,8 @@ export class Tab2Page implements OnInit {
 
 
 
-    
+
+
   }
 
 
