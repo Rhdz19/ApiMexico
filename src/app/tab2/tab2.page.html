@@ -5,11 +5,11 @@
 </ion-header>
 
 <ion-content>
-<form [formGroup]="myForm" (ngSubmit)="submitForm()">
+<form [formGroup]="myForm">
   <ion-list>
     <ion-item *ngIf="selectedOptionIndex >= 0">
       <ion-label>País</ion-label>
-      <ion-select (ionChange)="onCountryChange($event)" formControlName="countryForm">
+      <ion-select (ionChange)="onCountryChange($event); checkFormValidity()" formControlName="countryForm">
         <ion-select-option *ngFor="let country of countries" [value]="country" >
           {{ country.name }}
         </ion-select-option>
@@ -18,7 +18,7 @@
 
     <ion-item *ngIf="selectedOptionIndex >= 1">
       <ion-label>Estado</ion-label>
-      <ion-select (ionChange)="onStateChange($event)" formControlName="stateForm">
+      <ion-select (ionChange)="onStateChange($event); checkFormValidity()" formControlName="stateForm">
         <ion-select-option *ngFor="let state of states" [value]="state" >
           {{ state.name }}
         </ion-select-option>
@@ -27,11 +27,11 @@
 
     <ion-item *ngIf="selectedOptionIndex >= 2">
       <ion-label>Municipio</ion-label>
-      <ion-select (ionChange)="onMunicipalityChange($event)">
+      <ion-select (ionChange)="onMunicipalityChange($event); checkFormValidity()" formControlName="municipalityForm">
         <ion-select-option
           *ngFor="let municipality of municipalities"
           [value]="municipality"
-          formControlName="municipalityForm"
+          
         >
           {{ municipality.name }}
         </ion-select-option>
@@ -40,7 +40,7 @@
 
     <ion-item *ngIf="selectedOptionIndex >= 3">
       <ion-label>Colonia</ion-label>
-      <ion-select (ionChange)="onColonyChange($event)" formControlName="colonyForm">
+      <ion-select (ionChange)="onColonyChange($event); checkFormValidity()" formControlName="colonyForm">
         <ion-select-option *ngFor="let colony of colonies" [value]="colony"
         >
           {{ colony.name }}
@@ -57,8 +57,8 @@
         </ion-item>
       </ion-list>
     </ion-item>
-    <ion-button type="submit" [disabled]="!myForm.value" color="blue" expand="block"
-    >Submit</ion-button>
+    <ion-button type="submit" [disabled]="isButtonDisabled" color="blue" expand="block">Comprobar</ion-button>
+
 
   </ion-list>
 </form>

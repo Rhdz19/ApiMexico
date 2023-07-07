@@ -4,8 +4,8 @@ import { LocationService } from '../services/location.service';
 import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AlertController } from '@ionic/angular';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 @Component({
   selector: 'app-location-select',
   templateUrl: './tab2.page.html',
@@ -16,7 +16,9 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 })
 export class Tab2Page implements OnInit {
 
-  myform: FormGroup;
+  isButtonDisabled: boolean = true;
+
+  myForm: FormGroup = new FormGroup({});
 
   selectedOptionIndex: number = 0;
 
@@ -37,12 +39,12 @@ export class Tab2Page implements OnInit {
   cities: any[] = [];
   selectedCity: any;
 
-  constructor(private locationService: LocationService, public formBuilder: FormBuilder) {
+  constructor(private locationService: LocationService, public formBuilder: FormBuilder,private alertController: AlertController) {
      }
 
   ngOnInit() {
     this.loadCountries();
-    this.myform = this.formBuilder.group({
+    this.myForm = this.formBuilder.group({
 
       countryForm:['',[Validators.required]],
       stateForm:['',[Validators.required]],
@@ -52,14 +54,10 @@ export class Tab2Page implements OnInit {
     });
     
   }
-  submitForm = () => {
-    if (this.myform.valid) {
-      console.log(this.myform.value);
-      return false;
-    } else {
-      return console.log('Debes seleccionar primero todos los valores');
-    }
-  };
+  
+  checkFormValidity() {
+    this.isButtonDisabled = !this.myForm.valid;
+  }
 
   loadCountries() {
     this.locationService.getCountries().subscribe(countryNames => {
@@ -67,7 +65,8 @@ export class Tab2Page implements OnInit {
     });
 
   }
-
+  
+  
   onCountryChange(event: any) {
 
     const selectedCountry = event.detail.value;
@@ -82,7 +81,9 @@ export class Tab2Page implements OnInit {
       this.selectedCity = null;
       this.selectedColony = null;
       this.selectedOptionIndex = 1;
+
     });
+    
   }
 
   onStateChange(event: any) {
@@ -96,6 +97,7 @@ export class Tab2Page implements OnInit {
       this.selectedCity = null;
       this.selectedColony = null;
       this.selectedOptionIndex = 2;
+
     });
   }
   onMunicipalityChange(event: any) {
@@ -106,6 +108,7 @@ export class Tab2Page implements OnInit {
       this.colonies = colonies.colonies;
       this.selectedCity = null;
       this.selectedOptionIndex = 3;
+
     });
   }
 
@@ -144,8 +147,18 @@ export class Tab2Page implements OnInit {
     });
 
     this.selectedOptionIndex = 4;
+    
+
+
+
+
+
+
+
+    
   }
 
 
 }
+
 
