@@ -1,90 +1,151 @@
-// import { Component } from '@angular/core';
-// import { IonicModule } from '@ionic/angular';
-// import { ExploreContainerPage } from '../explore-container/explore-container.page';
 
-// @Component({
-//   selector: 'app-tab2',
-//   templateUrl: 'tab2.page.html',
-//   styleUrls: ['tab2.page.scss'],
-//   standalone: true,
-//   imports: [IonicModule, ExploreContainerPage]
-// })
-// export class Tab2Page {
-
-//   constructor() {}
-
-// }
 import { Component, OnInit } from '@angular/core';
 import { LocationService } from '../services/location.service';
 import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-location-select',
   templateUrl: './tab2.page.html',
   styleUrls: ['./tab2.page.scss'],
   standalone: true,
-  imports: [IonicModule, HttpClientModule]
+  imports: [IonicModule, HttpClientModule, CommonModule, ReactiveFormsModule, FormsModule],
+  providers: [LocationService]
 })
 export class Tab2Page implements OnInit {
+
+  myform: FormGroup;
+
+  selectedOptionIndex: number = 0;
+
   countries: any[] = [];
   selectedCountry: any;
+  globalState: any = "";
 
   states: any[] = [];
   selectedState: any;
 
   municipalities: any[] = [];
   selectedMunicipality: any;
-
-  cities: any[] = [];
-  selectedCity: any;
+  globalMunicipality: any = "";
 
   colonies: any[] = [];
   selectedColony: any;
 
-  constructor(private locationService: LocationService) {}
+  cities: any[] = [];
+  selectedCity: any;
+
+  constructor(private locationService: LocationService, public formBuilder: FormBuilder) {
+     }
 
   ngOnInit() {
     this.loadCountries();
+    this.myform = this.formBuilder.group({
+
+      countryForm:['',[Validators.required]],
+      stateForm:['',[Validators.required]],
+      municipalityForm:['',[Validators.required]],
+      colonyForm:['',[Validators.required]],
+  
+    });
+    
   }
+  submitForm = () => {
+    if (this.myform.valid) {
+      console.log(this.myform.value);
+      return false;
+    } else {
+      return console.log('Debes seleccionar primero todos los valores');
+    }
+  };
 
   loadCountries() {
-    this.locationService.getCountries().subscribe((countries) => {
-      this.countries = countries;
+    this.locationService.getCountries().subscribe(countryNames => {
+      this.countries = countryNames;
     });
+
   }
 
-  onCountryChange() {
-    this.locationService.getStates(this.selectedCountry.id).subscribe((states) => {
-      this.states = states;
+  onCountryChange(event: any) {
+
+    const selectedCountry = event.detail.value;
+    this.selectedCountry = [selectedCountry];
+
+    this.locationService.getStates(selectedCountry.country_id).subscribe((states: any) => {
+
+      this.states = states.states;
+
       this.selectedState = null;
       this.selectedMunicipality = null;
       this.selectedCity = null;
       this.selectedColony = null;
+      this.selectedOptionIndex = 1;
     });
   }
 
-  onStateChange() {
-    this.locationService.getMunicipalities(this.selectedState.id).subscribe((municipalities) => {
-      this.municipalities = municipalities;
+  onStateChange(event: any) {
+
+    const selectedState = event.detail.value;
+    this.globalState = selectedState;
+    this.selectedState = [selectedState];
+    this.locationService.getMunicipalities(selectedState.state_id).subscribe((municipalities: any) => {
+      this.municipalities = municipalities.municipalities;
       this.selectedMunicipality = null;
       this.selectedCity = null;
       this.selectedColony = null;
+      this.selectedOptionIndex = 2;
     });
   }
-
-  onMunicipalityChange() {
-    this.locationService.getCities(this.selectedMunicipality.id).subscribe((cities) => {
-      this.cities = cities;
+  onMunicipalityChange(event: any) {
+    const selectedMunicipality = event.detail.value;
+    this.selectedMunicipality = [selectedMunicipality];
+    this.globalMunicipality = selectedMunicipality.name
+    this.locationService.getColonies(selectedMunicipality.municipality_id).subscribe((colonies: any) => {
+      this.colonies = colonies.colonies;
       this.selectedCity = null;
-      this.selectedColony = null;
+      this.selectedOptionIndex = 3;
     });
   }
 
-  onCityChange() {
-    this.locationService.getColonies(this.selectedCity.id).subscribe((colonies) => {
-      this.colonies = colonies;
-      this.selectedColony = null;
+
+  onColonyChange(event: any) {
+
+    const selectedColony = event.detail.value;
+    this.selectedColony = [selectedColony];
+
+    this.locationService.getCities(selectedColony.state_id).subscribe((cities: any) => {
+      this.cities = cities.cities;
+
+      const matchingColony = findMatchingColony(this.colonies, selectedColony.name);
+      function findMatchingColony(colonies: any[], selectedColony: string): any | undefined {
+        for (const colony of colonies) {
+          if (colony.name === selectedColony) {
+            return colony;
+          }
+          if (colony.colonies && colony.colonies.length > 0) {
+            const matchingColony = findMatchingColony(colony.colonies, selectedColony);
+            if (matchingColony) {
+              return matchingColony;
+            }
+          }
+        }
+        return undefined;
+      }
+      if (matchingColony) {
+
+        this.cities = [matchingColony];
+
+       
+      } else {
+        console.log("Sin colonias coincidentes");
+      }
     });
+
+    this.selectedOptionIndex = 4;
   }
+
+
 }
 

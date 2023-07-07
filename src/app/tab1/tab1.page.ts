@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import {ExploreContainerPage } from '../explore-container/explore-container.page';
+import { ExploreContainerPage } from '../explore-container/explore-container.page';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AutocompleteService } from '../services/autocomplete.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ViewChild, AfterViewInit } from '@angular/core';
+
 
 
 @Component({
@@ -16,32 +18,34 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   providers: [HttpClient]
 
 })
+
+
 export class Tab1Page implements OnInit {
+  @ViewChild('searchBar') searchBar: any;
+
   searchTerm: string = "";
-  autocompleteOptions: string[] = [];
+  autocompleteOptions: any[] = [];
   timer: any; 
-  constructor(private auto_complete_Service: AutocompleteService) {}
+  
+  constructor(private AutocompleteService: AutocompleteService) {}
   ngOnInit() {  }
-  onSearchChange(event: any) {
-    const searchTerm = event.detail.value;
+
   
-    // Verificar si el campo de búsqueda está vacío
-    if (!searchTerm) {
+  onSearchChange(event: any ) {
+    
+    clearTimeout(this.timer);
+    
+    if (this.searchTerm.length >= 3) {
+      this.timer = setTimeout(() => {
+        this.AutocompleteService.searchLocation(this.searchTerm).subscribe((results: any[]) => {
+          this.autocompleteOptions = results;
+        });
+      }, 4000);
+    } else {
       this.autocompleteOptions = [];
-      return;
+
     }
-  
-    // Cancelar solicitudes pendientes anteriores
-    clearTimeout(this.auto_complete_Service.timer);
-
-    // Esperar 4 segundos después de que el usuario deja de escribir
-    this.auto_complete_Service.timer = setTimeout(() => {
-      this.auto_complete_Service.fetchAutocompleteOptions(searchTerm).subscribe(response => {
-        this.autocompleteOptions = response.options;
-      });
-    }, 4000);
   }
-
 
 
 }
