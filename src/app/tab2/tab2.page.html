@@ -5,29 +5,29 @@
 </ion-header>
 
 <ion-content>
-<form [formGroup]="myForm">
+<form [formGroup]="my_form">
   <ion-list>
-    <ion-item *ngIf="selectedOptionIndex >= 0">
+    <ion-item *ngIf="selected_option_index >= 0">
       <ion-label>País</ion-label>
-      <ion-select (ionChange)="onCountryChange($event); checkFormValidity()" formControlName="countryForm">
+      <ion-select (ionChange)="onCountryChange($event); checkFormValidity()" formControlName="country_form">
         <ion-select-option *ngFor="let country of countries" [value]="country" >
           {{ country.name }}
         </ion-select-option>
       </ion-select>
     </ion-item>
 
-    <ion-item *ngIf="selectedOptionIndex >= 1">
+    <ion-item *ngIf="selected_option_index >= 1">
       <ion-label>Estado</ion-label>
-      <ion-select (ionChange)="onStateChange($event); checkFormValidity()" formControlName="stateForm">
+      <ion-select (ionChange)="onStateChange($event); checkFormValidity()" formControlName="state_form">
         <ion-select-option *ngFor="let state of states" [value]="state" >
           {{ state.name }}
         </ion-select-option>
       </ion-select>
     </ion-item>
 
-    <ion-item *ngIf="selectedOptionIndex >= 2">
+    <ion-item *ngIf="selected_option_index >= 2">
       <ion-label>Municipio</ion-label>
-      <ion-select (ionChange)="onMunicipalityChange($event); checkFormValidity()" formControlName="municipalityForm">
+      <ion-select (ionChange)="onMunicipalityChange($event); checkFormValidity()" formControlName="municipality_form">
         <ion-select-option
           *ngFor="let municipality of municipalities"
           [value]="municipality"
@@ -38,9 +38,9 @@
       </ion-select>
     </ion-item>
 
-    <ion-item *ngIf="selectedOptionIndex >= 3">
+    <ion-item *ngIf="selected_option_index >= 3">
       <ion-label>Colonia</ion-label>
-      <ion-select (ionChange)="onColonyChange($event); checkFormValidity()" formControlName="colonyForm">
+      <ion-select (ionChange)="onColonyChange($event); checkFormValidity()" formControlName="colony_form">
         <ion-select-option *ngFor="let colony of colonies" [value]="colony"
         >
           {{ colony.name }}
@@ -48,7 +48,7 @@
       </ion-select>
     </ion-item>
 
-    <ion-item *ngIf="selectedOptionIndex >= 4"
+    <ion-item *ngIf="selected_option_index >= 4"
       >
       <ion-label>Ciudad</ion-label>
       <ion-list>
@@ -57,7 +57,7 @@
         </ion-item>
       </ion-list>
     </ion-item>
-    <ion-button type="submit" [disabled]="isButtonDisabled" color="blue" expand="block">Comprobar</ion-button>
+    <ion-button type="submit" [disabled]="is_button_disabled" color="blue" expand="block">Comprobar</ion-button>
 
 
   </ion-list>

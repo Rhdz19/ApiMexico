@@ -38,6 +38,16 @@ export class LocationService {
    * 5:Validar la respuesta de la api mediante TRY catch y valida que el contenido sea un JSON valido
    *
    * @returns
+   *       
+         * CORRECCION:
+         * 1: Cambiar el uso de subscribe de un Observable a then de Promise
+         * 2: results: any[], debe tener tipado
+         *    Ejemplo: results : location_prediction[]
+
+   * 1: Las variables declaradas como propiedad de una clase, deben seguir el formato  SNAKE_CASE, solo las variables en constructor o paquetes importados
+   *    deben usar CamelCase
+   * 2: Las variables deben estar tipadas
+         
    */
   getCountries(): Observable<any[]> {
     return this.http.get<any[]>('https://api.m2mexico.com/api/resources/countries');

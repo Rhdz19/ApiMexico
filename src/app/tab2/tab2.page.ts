@@ -1,11 +1,10 @@
 
 import { Component, OnInit } from '@angular/core';
 import { LocationService } from '../services/location.service';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, AlertController } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { AlertController } from '@ionic/angular';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators} from '@angular/forms';
 @Component({
   selector: 'app-location-select',
   templateUrl: './tab2.page.html',
@@ -22,129 +21,119 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, A
 
 export class Tab2Page implements OnInit {
 
-  isButtonDisabled: boolean = true;
+  is_button_disabled: boolean = true;
 
-  myForm: FormGroup = new FormGroup({});
+  my_form: FormGroup = new FormGroup({});
 
-  selectedOptionIndex: number = 0;
+  selected_option_index: number = 0;
 
   countries: any[] = [];
-  selectedCountry: any;
-  globalState: any = "";
+  selected_country: any;
+  global_state: any = "";
 
   states: any[] = [];
-  selectedState: any;
+  selected_state: any;
 
   municipalities: any[] = [];
-  selectedMunicipality: any;
-  globalMunicipality: any = "";
+  selected_municipality: any;
+  global_municipality: any = "";
 
   colonies: any[] = [];
-  selectedColony: any;
+  selected_colony: any;
 
   cities: any[] = [];
-  selectedCity: any;
+  selected_city: any;
 
   constructor(private locationService: LocationService, public formBuilder: FormBuilder,private alertController: AlertController) {
-     }
+     
+  }
 
   ngOnInit() {
     this.loadCountries();
-    this.myForm = this.formBuilder.group({
-
-      countryForm:['',[Validators.required]],
-      stateForm:['',[Validators.required]],
-      municipalityForm:['',[Validators.required]],
-      colonyForm:['',[Validators.required]],
-
+    this.my_form = this.formBuilder.group({
+      country_form:['',[Validators.required]],
+      state_form:['',[Validators.required]],
+      municipality_form:['',[Validators.required]],
+      colony_form:['',[Validators.required]],
     });
-
   }
 
   checkFormValidity() {
-    this.isButtonDisabled = !this.myForm.valid;
+    this.is_button_disabled = !this.my_form.valid;
   }
 
   loadCountries() {
-    this.locationService.getCountries().subscribe(countryNames => {
-      this.countries = countryNames;
+    this.locationService.getCountries().subscribe(country_names => {
+      this.countries = country_names;
     });
-
   }
 
-
   onCountryChange(event: any) {
+    const selected_country = event.detail.value;
+    this.selected_country = [selected_country];
 
-    const selectedCountry = event.detail.value;
-    this.selectedCountry = [selectedCountry];
-
-    this.locationService.getStates(selectedCountry.country_id).subscribe((states: any) => {
-
+    this.locationService.getStates(selected_country.country_id).subscribe((states: any) => {
       this.states = states.states;
-
-      this.selectedState = null;
-      this.selectedMunicipality = null;
-      this.selectedCity = null;
-      this.selectedColony = null;
-      this.selectedOptionIndex = 1;
-
+      this.selected_state = null;
+      this.selected_municipality = null;
+      this.selected_city = null;
+      this.selected_colony = null;
+      this.selected_option_index = 1;
     });
-
   }
 
   onStateChange(event: any) {
-
-    const selectedState = event.detail.value;
-    this.globalState = selectedState;
-    this.selectedState = [selectedState];
-    this.locationService.getMunicipalities(selectedState.state_id).subscribe((municipalities: any) => {
+    const selected_state = event.detail.value;
+    this.global_state = selected_state;
+    this.selected_state = [selected_state];
+    this.locationService.getMunicipalities(selected_state.state_id).subscribe((municipalities: any) => {
       this.municipalities = municipalities.municipalities;
-      this.selectedMunicipality = null;
-      this.selectedCity = null;
-      this.selectedColony = null;
-      this.selectedOptionIndex = 2;
+      this.selected_municipality = null;
+      this.selected_city = null;
+      this.selected_colony = null;
+      this.selected_option_index = 2;
 
     });
   }
+
   onMunicipalityChange(event: any) {
-    const selectedMunicipality = event.detail.value;
-    this.selectedMunicipality = [selectedMunicipality];
-    this.globalMunicipality = selectedMunicipality.name
-    this.locationService.getColonies(selectedMunicipality.municipality_id).subscribe((colonies: any) => {
+    const selected_municipality = event.detail.value;
+    this.selected_municipality = [selected_municipality];
+    this.global_municipality = selected_municipality.name
+    this.locationService.getColonies(selected_municipality.municipality_id).subscribe((colonies: any) => {
       this.colonies = colonies.colonies;
-      this.selectedCity = null;
-      this.selectedOptionIndex = 3;
+      this.selected_city = null;
+      this.selected_option_index = 3;
 
     });
   }
-
 
   onColonyChange(event: any) {
 
-    const selectedColony = event.detail.value;
-    this.selectedColony = [selectedColony];
+    const selected_colony = event.detail.value;
+    this.selected_colony = [selected_colony];
 
-    this.locationService.getCities(selectedColony.state_id).subscribe((cities: any) => {
+    this.locationService.getCities(selected_colony.state_id).subscribe((cities: any) => {
       this.cities = cities.cities;
 
-      const matchingColony = findMatchingColony(this.colonies, selectedColony.name);
-      function findMatchingColony(colonies: any[], selectedColony: string): any | undefined {
+      const matching_colony = findMatchingColony(this.colonies, selected_colony.name);
+      function findMatchingColony(colonies: any[], selected_colony: string): any | undefined {
         for (const colony of colonies) {
-          if (colony.name === selectedColony) {
+          if (colony.name === selected_colony) {
             return colony;
           }
           if (colony.colonies && colony.colonies.length > 0) {
-            const matchingColony = findMatchingColony(colony.colonies, selectedColony);
-            if (matchingColony) {
-              return matchingColony;
+            const matching_colony = findMatchingColony(colony.colonies, selected_colony);
+            if (matching_colony) {
+              return matching_colony;
             }
           }
         }
         return undefined;
       }
-      if (matchingColony) {
+      if (matching_colony) {
 
-        this.cities = [matchingColony];
+        this.cities = [matching_colony];
 
 
       } else {
@@ -152,18 +141,9 @@ export class Tab2Page implements OnInit {
       }
     });
 
-    this.selectedOptionIndex = 4;
-
-
-
-
-
-
-
-
+    this.selected_option_index = 4;
 
   }
-
 
 }
 

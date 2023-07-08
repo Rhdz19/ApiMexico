@@ -1,13 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { ExploreContainerPage } from '../explore-container/explore-container.page';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AutocompleteService } from '../services/autocomplete.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ViewChild, AfterViewInit } from '@angular/core';
-
-
 
 @Component({
   selector: 'app-tab1',
@@ -16,12 +13,10 @@ import { ViewChild, AfterViewInit } from '@angular/core';
   standalone: true,
   imports: [IonicModule, ExploreContainerPage, FormsModule, CommonModule, HttpClientModule],
   providers: [HttpClient]
-
 })
 
-
 export class Tab1Page implements OnInit {
-  @ViewChild('searchBar') searchBar: any;
+  @ViewChild('search_bar') search_bar: any;
 
   /**
    * CORRECCION :
@@ -29,19 +24,18 @@ export class Tab1Page implements OnInit {
    *    deben usar CamelCase
    * 2: Las variables deben estar tipadas
    */
-  searchTerm: string = "";
-  autocompleteOptions: any[] = [];
+  search_term: string = "";
+  auto_complete_options: any[] = [];
   timer: any;
 
   constructor(private AutocompleteService: AutocompleteService) { }
   ngOnInit() { }
 
-
   onSearchChange(event: any) {
 
     clearTimeout(this.timer);
 
-    if (this.searchTerm.length >= 3) {
+    if (this.search_term.length >= 3) {
       this.timer = setTimeout(() => {
 
         /**
@@ -50,13 +44,13 @@ export class Tab1Page implements OnInit {
          * 2: results: any[], debe tener tipado
          *    Ejemplo: results : location_prediction[]
          */
-        this.AutocompleteService.searchLocation(this.searchTerm).subscribe((results: any[]) => {
-          this.autocompleteOptions = results;
+        this.AutocompleteService.searchLocation(this.search_term).subscribe((results: any[]) => {
+          this.auto_complete_options = results;
         });
       }, 4000);
 
     } else {
-      this.autocompleteOptions = [];
+      this.auto_complete_options = [];
 
     }
   }
