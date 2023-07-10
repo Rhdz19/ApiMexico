@@ -5,11 +5,11 @@
 </ion-header>
 
 <ion-content>
-  <ion-searchbar type="text" (ionInput)="onSearchChange($event)" [(ngModel)]="searchTerm"></ion-searchbar>
+  <ion-searchbar type="text" (ionInput)="onSearchChange($event)" [(ngModel)]="search_term"></ion-searchbar>
 
-  <ion-list *ngIf="autocompleteOptions.length > 0">
-    <ion-item *ngFor="let option of autocompleteOptions">
-      {{ option }}
+  <ion-list *ngIf="auto_complete_options.length > 0">
+    <ion-item *ngFor="let option of auto_complete_options">
+      {{ option.full_location }}
     </ion-item>
   </ion-list>
 </ion-content>
