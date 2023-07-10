@@ -4,7 +4,6 @@ import { LocationService } from '../services/location.service';
 import { IonicModule, AlertController } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { AlertController } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators} from '@angular/forms';
 @Component({
   selector: 'app-location-select',
