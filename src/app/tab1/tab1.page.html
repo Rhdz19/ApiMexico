@@ -9,7 +9,9 @@
 
   <ion-list *ngIf="auto_complete_options.length > 0">
     <ion-item *ngFor="let option of auto_complete_options">
-      {{ option }}
+
+      {{ option.full_location }}
+
     </ion-item>
   </ion-list>
 </ion-content>
