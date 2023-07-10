@@ -5,7 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AutocompleteService } from '../services/autocomplete.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+
+
 import { index_location_auto_complete } from '../interfaces/mexicoInterface';
+
 
 @Component({
   selector: 'app-tab1',
@@ -28,10 +31,12 @@ export class Tab1Page implements OnInit {
 
   async onSearchChange(event: any) {
 
+
     clearTimeout(this.timer);
 
     if (this.search_term.length >= 3) {
       this.timer = setTimeout(() => {
+
         this.autocompleteService.searchLocation(this.search_term)
           .then((results: index_location_auto_complete[]) => {
             this.auto_complete_options = results;
