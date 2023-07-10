@@ -19,8 +19,8 @@
     <ion-item *ngIf="selected_option_index >= 1">
       <ion-label>Estado</ion-label>
       <ion-select (ionChange)="onStateChange($event); checkFormValidity()" formControlName="state_form">
-        <ion-select-option *ngFor="let state of states" [value]="state" >
-          {{ state.name }}
+        <ion-select-option *ngFor="let state of states?.states" [value]="state" >
+          {{ state}}
         </ion-select-option>
       </ion-select>
     </ion-item>
@@ -29,11 +29,11 @@
       <ion-label>Municipio</ion-label>
       <ion-select (ionChange)="onMunicipalityChange($event); checkFormValidity()" formControlName="municipality_form">
         <ion-select-option
-          *ngFor="let municipality of municipalities"
+          *ngFor="let municipality of municipalities?.municipalities"
           [value]="municipality"
           
         >
-          {{ municipality.name }}
+          {{ municipality }}
         </ion-select-option>
       </ion-select>
     </ion-item>
@@ -41,9 +41,9 @@
     <ion-item *ngIf="selected_option_index >= 3">
       <ion-label>Colonia</ion-label>
       <ion-select (ionChange)="onColonyChange($event); checkFormValidity()" formControlName="colony_form">
-        <ion-select-option *ngFor="let colony of colonies" [value]="colony"
+        <ion-select-option *ngFor="let colony of colonies?.colonies" [value]="colony"
         >
-          {{ colony.name }}
+          {{ colony }}
         </ion-select-option>
       </ion-select>
     </ion-item>
@@ -52,8 +52,8 @@
       >
       <ion-label>Ciudad</ion-label>
       <ion-list>
-        <ion-item *ngFor="let city of cities" >
-          {{ city.city }}
+        <ion-item *ngFor="let city of cities?.cities" >
+          {{ city }}
         </ion-item>
       </ion-list>
     </ion-item>

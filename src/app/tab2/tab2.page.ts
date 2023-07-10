@@ -5,6 +5,7 @@ import { IonicModule, AlertController } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { index_location_country, index_location_state, index_location_Municipality, index_location_Colony, index_location_city } from '../interfaces/mexicoInterface';
 @Component({
   selector: 'app-location-select',
   templateUrl: './tab2.page.html',
@@ -27,22 +28,23 @@ export class Tab2Page implements OnInit {
 
   selected_option_index: number = 0;
 
-  countries: any[] = [];
-  selected_country: any;
-  global_state: any = "";
+  countries: index_location_country[] = [];
+  selected_country: string="";
+  global_state: string = "";
 
-  states: any[] = [];
-  selected_state: any;
+  states?: index_location_state;
+  selected_state: string = "";
 
-  municipalities: any[] = [];
-  selected_municipality: any;
-  global_municipality: any = "";
+  municipalities?: index_location_Municipality;
+  selected_municipality: string = "";
+  global_municipality: string = "";
 
-  colonies: any[] = [];
-  selected_colony: any;
+  colonies?: index_location_Colony;
+  selected_colony: string = "";
 
-  cities: any[] = [];
-  selected_city: any;
+cities?: index_location_city ;
+  selected_city: string = "";
+  
 
   constructor(private locationService: LocationService, public formBuilder: FormBuilder,private alertController: AlertController) {
      
@@ -63,87 +65,96 @@ export class Tab2Page implements OnInit {
   }
 
   loadCountries() {
-    this.locationService.getCountries().subscribe(country_names => {
-      this.countries = country_names;
+    this.locationService.getCountries().then((countries: index_location_country[]) => {
+      this.countries = countries;
+    }).catch((error: any) => {
+      console.error('Error al cargar los paises:', error);
     });
   }
-
+  
   onCountryChange(event: any) {
     const selected_country = event.detail.value;
-    this.selected_country = [selected_country];
-
-    this.locationService.getStates(selected_country.country_id).subscribe((states: any) => {
-      this.states = states.states;
-      this.selected_state = null;
-      this.selected_municipality = null;
-      this.selected_city = null;
-      this.selected_colony = null;
+    this.selected_country = selected_country;
+  
+    this.locationService.getStates(selected_country.country_id).then((states: index_location_state) => {
+      console.log(states)
+      this.states = states;
+      this.selected_state = "";
+      this.selected_municipality = "";
+      this.selected_city = "";
+      this.selected_colony = "";
       this.selected_option_index = 1;
+      console.log(this.states)
+      console.log(states.states)
+    }).catch((error: any) => {
+      console.error('Error al obtener los estados:', error);
     });
   }
 
   onStateChange(event: any) {
     const selected_state = event.detail.value;
     this.global_state = selected_state;
-    this.selected_state = [selected_state];
-    this.locationService.getMunicipalities(selected_state.state_id).subscribe((municipalities: any) => {
-      this.municipalities = municipalities.municipalities;
-      this.selected_municipality = null;
-      this.selected_city = null;
-      this.selected_colony = null;
+    this.selected_state = selected_state;
+  
+    this.locationService.getMunicipalities(selected_state.state_id).then((municipalities: index_location_Municipality) => {
+      this.municipalities = municipalities;
+      this.selected_municipality = "";
+      this.selected_city = "";
+      this.selected_colony = "";
       this.selected_option_index = 2;
-
+    }).catch((error: any) => {
+      console.error('Error al obtener los municipios:', error);
     });
   }
-
+  
   onMunicipalityChange(event: any) {
     const selected_municipality = event.detail.value;
-    this.selected_municipality = [selected_municipality];
-    this.global_municipality = selected_municipality.name
-    this.locationService.getColonies(selected_municipality.municipality_id).subscribe((colonies: any) => {
-      this.colonies = colonies.colonies;
-      this.selected_city = null;
+    this.selected_municipality = selected_municipality;
+    this.global_municipality = selected_municipality.name;
+  
+    this.locationService.getColonies(selected_municipality.municipality_id).then((colonies: index_location_Colony) => {
+      this.colonies = colonies;
+      this.selected_city = "";
       this.selected_option_index = 3;
-
+    }).catch((error: any) => {
+      console.error('Error al obtener las colonias:', error);
     });
   }
-
   onColonyChange(event: any) {
-
     const selected_colony = event.detail.value;
-    this.selected_colony = [selected_colony];
-
-    this.locationService.getCities(selected_colony.state_id).subscribe((cities: any) => {
-      this.cities = cities.cities;
-
-      const matching_colony = findMatchingColony(this.colonies, selected_colony.name);
-      function findMatchingColony(colonies: any[], selected_colony: string): any | undefined {
-        for (const colony of colonies) {
-          if (colony.name === selected_colony) {
-            return colony;
-          }
-          if (colony.colonies && colony.colonies.length > 0) {
-            const matching_colony = findMatchingColony(colony.colonies, selected_colony);
-            if (matching_colony) {
-              return matching_colony;
-            }
-          }
-        }
-        return undefined;
-      }
+    this.selected_colony = selected_colony;
+  
+    this.locationService.getCities(selected_colony.state_id).then((cities: index_location_city) => {
+      this.cities = cities;
+  
+      const matching_colony = this.findMatchingColony(this.colonies, selected_colony.name);
       if (matching_colony) {
-
-        this.cities = [matching_colony];
-
-
+        this.cities = matching_colony;
       } else {
         console.log("Sin colonias coincidentes");
       }
+    }).catch((error: any) => {
+      console.error('Error al obtener las ciudades:', error);
     });
-
+  
     this.selected_option_index = 4;
-
   }
+  
+  findMatchingColony(colonies: any, selected_colony: string): any | undefined {
+    for (const colony of colonies) {
+      if (colony.name === selected_colony) {
+        return colony;
+      }
+      if (colony.colonies && colony.colonies.length > 0) {
+        const matching_colony = this.findMatchingColony(colony.colonies, selected_colony);
+        if (matching_colony) {
+          return matching_colony;
+        }
+      }
+    }
+    return undefined;
+  }
+  
 
 }
 
