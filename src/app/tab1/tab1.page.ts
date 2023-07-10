@@ -25,25 +25,25 @@ export class Tab1Page implements OnInit {
 
   constructor(private autocompleteService: AutocompleteService) { }
   ngOnInit() { }
-  
+
   async onSearchChange(event: any) {
+
     clearTimeout(this.timer);
-  
+
     if (this.search_term.length >= 3) {
       this.timer = setTimeout(() => {
         this.autocompleteService.searchLocation(this.search_term)
           .then((results: index_location_auto_complete[]) => {
-            this.auto_complete_options = results.filter(option =>
-              option.name.toLowerCase().includes(this.search_term.toLowerCase())
-            );
-            console.log(this.auto_complete_options);
+            this.auto_complete_options = results;
+            console.log(this.auto_complete_options)
           })
           .catch(error => {
-            console.error(error);
+            console.error(error); 
           });
       }, 4000);
-    } else {
+    }else {
       this.auto_complete_options = [];
+
     }
   }
 
