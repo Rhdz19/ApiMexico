@@ -1,7 +1,8 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, lastValueFrom } from 'rxjs';
+import { index_location_Colony, index_location_Municipality, index_location_city, index_location_country, index_location_state } from '../interfaces/mexicoInterface';
 
 
 @Injectable({
@@ -11,64 +12,70 @@ export class LocationService {
   constructor(private http: HttpClient) {}
 
 
-  /**
-   * CORRECCION:
-   * 1: Todas las funciones de servicio deben retornar :Promise<T>, Implementar uso de lastValueFrom()
-   * 2: Cada funcion debe tener un tipado de retorno.
-   * Ejemplo   :  getCountries(): Promise<index_location_countries[]>
-   * export interface index_location_countries {
-   * country_id : string,
-   * name : string
-   * }
-   *
-   * 3: Las interfaces usadas, deben añadirce a la carpeta app/interfaces
-   * 4: Las interfaces deben tener un patron de nombre, basado en su uso y tipo de informacion que manejan
-   * ejemplos:
-   * index => Las monomenclaturas index, se usan para datos usandos en "select, listas etc"
-   * types => types se usa para datos de "tipos", ejemplo  "tipos de moneda", "tipos de operacion", "tipos de publicacion" etc..
-   * location => location se usa para datos de tipo ubicacion
-   *
-   * index_location_countries
-   * index_location_states
-   * index_location_......
-   *
-   * index_types_items
-   * index_types_currency....
-   *
-   * 5:Validar la respuesta de la api mediante TRY catch y valida que el contenido sea un JSON valido
-   *
-   * @returns
-   *       
-         * CORRECCION:
-         * 1: Cambiar el uso de subscribe de un Observable a then de Promise
-         * 2: results: any[], debe tener tipado
-         *    Ejemplo: results : location_prediction[]
-
-   * 1: Las variables declaradas como propiedad de una clase, deben seguir el formato  SNAKE_CASE, solo las variables en constructor o paquetes importados
-   *    deben usar CamelCase
-   * 2: Las variables deben estar tipadas
-         
-   */
-  getCountries(): Observable<any[]> {
-    return this.http.get<any[]>('https://api.m2mexico.com/api/resources/countries');
+  async getCountries(): Promise<index_location_country[]> {
+    try {
+      const response = await lastValueFrom(this.http.get<index_location_country[]>('https://api.m2mexico.com/api/resources/countries'));
+      this.validateJsonResponse(response);
+      return response;
+    } catch (error) {
+      throw new Error('Error del servicio al traer los países');
+    }
   }
-
-  getStates(countryId: number ): Observable<any[]> {
-    return this.http.get<any[]>(`https://api.m2mexico.com/api/resources/states/${countryId}`);
+  
+  async getStates(country_id: number): Promise<index_location_state> {
+    try {
+      const response = await lastValueFrom(this.http.get<index_location_state>(`https://api.m2mexico.com/api/resources/states/${country_id}`));
+      console.log(response)
+      this.validateJsonResponse(response);
+      return response;
+    } catch (error) {
+      throw new Error('Error del servicio al traer los estados');
+    }
   }
-
-  getMunicipalities(stateId: number): Observable<any[]> {
-    return this.http.get<any[]>(`https://api.m2mexico.com/api/resources/municipalities/${stateId}`);
+  
+  async getMunicipalities(state_id: number): Promise<index_location_Municipality> {
+    try {
+      const response = await lastValueFrom(this.http.get<index_location_Municipality>(`https://api.m2mexico.com/api/resources/municipalities/${state_id}`));
+      console.log(response)
+      this.validateJsonResponse(response);
+      return response;
+    } catch (error) {
+      throw new Error('Error del servicio al traer los municipios');
+    }
   }
-
-
-  getColonies(municipalityId: number): Observable<any[]> {
-    return this.http.get<any[]>(`https://api.m2mexico.com/api/resources/colonies/${municipalityId}`);
+  
+  async getColonies(municipality_id: number): Promise<index_location_Colony> {
+    try {
+      const response = await lastValueFrom(this.http.get<index_location_Colony>(`https://api.m2mexico.com/api/resources/colonies/${municipality_id}`));
+      console.log(response)
+      this.validateJsonResponse(response);
+      return response;
+    } catch (error) {
+      throw new Error('Error del servicio al traer las colonias');
+    }
   }
-
-  getCities(stateId: number): Observable<any[]> {
-    return this.http.get<any[]>(`https://api.m2mexico.com/api/resources/cities/${stateId}`);
+  
+  async getCities(state_id: number): Promise<index_location_city> {
+    try {
+      
+      const response = await lastValueFrom(this.http.get<index_location_city>(`https://api.m2mexico.com/api/resources/cities/${state_id}`));
+      console.log(response)
+      this.validateJsonResponse(response);
+      return response;
+    } catch (error) {
+      throw new Error('Error del servicio al traer las ciudades');
+    }
   }
+  
+  private validateJsonResponse(response: any): void {
+    try {
+      JSON.parse(JSON.stringify(response));
+    } catch (error) {
+      throw new Error('JSON con formato invalido');
+    }
+  }
+  
+
 
 
 }
