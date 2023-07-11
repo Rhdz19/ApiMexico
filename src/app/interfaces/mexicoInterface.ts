@@ -18,35 +18,35 @@
       export interface index_location_state {
         country_id: number;
         name: string;
-        states: [
+        states: {
             state_id: string,
             country_id: number,
             name: string
-        ]
+        }[]
       }
       export interface index_location_city{
         state_id: number;
         country_id: number;
         name: string;
-        cities: [
+        cities: {
           city: string
-        ]
+        }[]
       }
       export interface index_location_Municipality {
         state_id: number;
         country_id: number;
         name: string;
-        municipalities: [
+        municipalities: {
           municipality_id: string,
           state_id: number,
           name: string
-        ]
+        }[]
       }
       export interface index_location_Colony {
         municipality_id: number;
         state_id: number;
         name: string;
-        colonies:[
+        colonies:{
           colony_id: number,
           municipality_id: number,
           state_id: number ,
@@ -56,7 +56,7 @@
           city: string,
           full_location: string
       
-        ]
+        }[]
       }
  
 
