@@ -20,7 +20,7 @@
       <ion-label>Estado</ion-label>
       <ion-select (ionChange)="onStateChange($event); checkFormValidity()" formControlName="state_form">
         <ion-select-option *ngFor="let state of states?.states" [value]="state" >
-          {{ state}}
+          {{ state.name}}
         </ion-select-option>
       </ion-select>
     </ion-item>
@@ -33,7 +33,7 @@
           [value]="municipality"
           
         >
-          {{ municipality }}
+          {{ municipality.name }}
         </ion-select-option>
       </ion-select>
     </ion-item>
@@ -43,7 +43,7 @@
       <ion-select (ionChange)="onColonyChange($event); checkFormValidity()" formControlName="colony_form">
         <ion-select-option *ngFor="let colony of colonies?.colonies" [value]="colony"
         >
-          {{ colony }}
+          {{ colony.name }}
         </ion-select-option>
       </ion-select>
     </ion-item>
@@ -53,7 +53,7 @@
       <ion-label>Ciudad</ion-label>
       <ion-list>
         <ion-item *ngFor="let city of cities?.cities" >
-          {{ city }}
+          {{ city.city }}
         </ion-item>
       </ion-list>
     </ion-item>

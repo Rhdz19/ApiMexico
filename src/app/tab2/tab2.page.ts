@@ -77,15 +77,12 @@ cities?: index_location_city ;
     this.selected_country = selected_country;
   
     this.locationService.getStates(selected_country.country_id).then((states: index_location_state) => {
-      console.log(states)
       this.states = states;
       this.selected_state = "";
       this.selected_municipality = "";
       this.selected_city = "";
       this.selected_colony = "";
       this.selected_option_index = 1;
-      console.log(this.states)
-      console.log(states.states)
     }).catch((error: any) => {
       console.error('Error al obtener los estados:', error);
     });
@@ -127,35 +124,15 @@ cities?: index_location_city ;
     this.locationService.getCities(selected_colony.state_id).then((cities: index_location_city) => {
       this.cities = cities;
   
-      const matching_colony = this.findMatchingColony(this.colonies, selected_colony.name);
-      if (matching_colony) {
-        this.cities = matching_colony;
-      } else {
-        console.log("Sin colonias coincidentes");
-      }
+      this.cities.cities = this.cities.cities.filter((city) => city.city === selected_colony.city);
+  
+      console.log(this.cities.cities);
     }).catch((error: any) => {
       console.error('Error al obtener las ciudades:', error);
     });
   
     this.selected_option_index = 4;
   }
-  
-  findMatchingColony(colonies: any, selected_colony: string): any | undefined {
-    for (const colony of colonies) {
-      if (colony.name === selected_colony) {
-        return colony;
-      }
-      if (colony.colonies && colony.colonies.length > 0) {
-        const matching_colony = this.findMatchingColony(colony.colonies, selected_colony);
-        if (matching_colony) {
-          return matching_colony;
-        }
-      }
-    }
-    return undefined;
-  }
-  
-
 }
 
 

@@ -25,7 +25,6 @@ export class LocationService {
   async getStates(country_id: number): Promise<index_location_state> {
     try {
       const response = await lastValueFrom(this.http.get<index_location_state>(`https://api.m2mexico.com/api/resources/states/${country_id}`));
-      console.log(response)
       this.validateJsonResponse(response);
       return response;
     } catch (error) {
@@ -36,7 +35,6 @@ export class LocationService {
   async getMunicipalities(state_id: number): Promise<index_location_Municipality> {
     try {
       const response = await lastValueFrom(this.http.get<index_location_Municipality>(`https://api.m2mexico.com/api/resources/municipalities/${state_id}`));
-      console.log(response)
       this.validateJsonResponse(response);
       return response;
     } catch (error) {
@@ -47,7 +45,6 @@ export class LocationService {
   async getColonies(municipality_id: number): Promise<index_location_Colony> {
     try {
       const response = await lastValueFrom(this.http.get<index_location_Colony>(`https://api.m2mexico.com/api/resources/colonies/${municipality_id}`));
-      console.log(response)
       this.validateJsonResponse(response);
       return response;
     } catch (error) {
@@ -59,8 +56,8 @@ export class LocationService {
     try {
       
       const response = await lastValueFrom(this.http.get<index_location_city>(`https://api.m2mexico.com/api/resources/cities/${state_id}`));
-      console.log(response)
       this.validateJsonResponse(response);
+
       return response;
     } catch (error) {
       throw new Error('Error del servicio al traer las ciudades');
